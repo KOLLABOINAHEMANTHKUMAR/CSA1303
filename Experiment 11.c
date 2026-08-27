@@ -1,20 +1,60 @@
 #include <stdio.h>
 
+int n;
+int e[10][10];
+int closure[10];
+
+void findClosure(int state)
+{
+    int i;
+
+    closure[state] = 1;
+
+    for (i = 0; i < n; i++)
+    {
+        if (e[state][i] == 1 && closure[i] == 0)
+        {
+            findClosure(i);
+        }
+    }
+}
+
 int main()
 {
-    int e[4][4] = {0};
+    int i, j;
 
-    // Epsilon transitions
-    e[0][1] = 1;   // q0 -> q1
-    e[0][2] = 1;   // q0 -> q2
-    e[2][3] = 1;   // q2 -> q3
+    printf("Enter number of states: ");
+    scanf("%d", &n);
 
-    printf("Epsilon Closure:\n");
+    printf("Enter epsilon transition matrix:\n");
 
-    printf("E-closure(q0) = {q0, q1, q2, q3}\n");
-    printf("E-closure(q1) = {q1}\n");
-    printf("E-closure(q2) = {q2, q3}\n");
-    printf("E-closure(q3) = {q3}\n");
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < n; j++)
+        {
+            scanf("%d", &e[i][j]);
+        }
+    }
+
+    printf("\nEpsilon Closure:\n");
+
+    for (i = 0; i < n; i++)
+    {
+        for (j = 0; j < n; j++)
+            closure[j] = 0;
+
+        findClosure(i);
+
+        printf("E-closure(q%d) = { ", i);
+
+        for (j = 0; j < n; j++)
+        {
+            if (closure[j] == 1)
+                printf("q%d ", j);
+        }
+
+        printf("}\n");
+    }
 
     return 0;
 }
